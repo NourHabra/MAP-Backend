@@ -117,6 +117,25 @@ app.put("/categories/:id", async (req, res) => {
 	}
 });
 
+// Get all items in a certain category
+app.get("/categories/:categoryId", async (req, res) => {
+	try {
+		const categoryId = req.params.categoryId;
+		const items = await Item.find({ category_id: categoryId });
+
+		if (items.length === 0) {
+			return res
+				.status(404)
+				.json({ message: "No items found for this category" });
+		}
+
+		res.json(items);
+	} catch (err) {
+		console.error(err);
+		res.status(500).json({ error: "Failed to retrieve items" });
+	}
+});
+
 // Get all items with populated category details
 app.get("/items", async (req, res) => {
 	try {
