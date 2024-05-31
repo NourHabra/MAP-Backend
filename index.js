@@ -33,7 +33,7 @@ app.post("/signup", async (req, res) => {
 	try {
 		const newUser = new User(req.body);
 		const savedUser = await newUser.save();
-		res.status(200).json(savedUser); // 200 Created status code
+		res.status(201).json(savedUser); // 201 Created status code
 	} catch (err) {
 		console.error(err);
 		res.status(500).json({ error: "Failed to create user" });
@@ -61,7 +61,7 @@ app.post("/login", async (req, res) => {
 			return res.status(401).json({ error: "Invalid email or password" });
 
 		if (user.password === password)
-			res.status(200).json({ message: "Login successful" });
+			res.status(201).json({ message: "Login successful" });
 		else
 			return res.status(401).json({ error: "Invalid email or password" });
 	} catch (err) {
@@ -154,7 +154,7 @@ app.post("/items", async (req, res) => {
 	try {
 		const newItem = new Item(req.body);
 		const savedItem = await newItem.save();
-		res.status(200).json(savedItem); // 200 Created status code
+		res.status(201).json(savedItem); // 201 Created status code
 	} catch (err) {
 		console.error(err);
 		// Handle specific validation errors or send a generic error message
