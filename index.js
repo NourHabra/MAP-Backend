@@ -135,6 +135,22 @@ app.get("/categories/:categoryId", async (req, res) => {
 	}
 });
 
+app.get("/categories/:id/data", async (req, res) => {
+	try {
+		const categoryId = req.params.id;
+		const category = await Category.findById(categoryId);
+
+		if (!category) {
+			return res.status(404).json({ message: "Category not found" });
+		}
+
+		res.json(category);
+	} catch (err) {
+		console.error(err);
+		res.status(500).json({ error: "Failed to retrieve category" });
+	}
+});
+
 // Get all items with populated category details
 app.get("/items", async (req, res) => {
 	try {
@@ -202,8 +218,6 @@ app.get("/items/:id", async (req, res) => {
 		res.status(500).json({ error: "Failed to retrieve item" });
 	}
 });
-
-
 
 // Search Functionality
 
