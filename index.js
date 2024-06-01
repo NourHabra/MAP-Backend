@@ -187,6 +187,24 @@ app.put("/items/:id", async (req, res) => {
 	}
 });
 
+app.get("/items/:id", async (req, res) => {
+	try {
+		const itemId = req.params.id;
+		const item = await Item.findById(itemId).populate("category_id");
+
+		if (!item) {
+			return res.status(404).json({ message: "Item not found" });
+		}
+
+		res.json(item);
+	} catch (err) {
+		console.error(err);
+		res.status(500).json({ error: "Failed to retrieve item" });
+	}
+});
+
+
+
 // Search Functionality
 
 // Search categories by name (regular expression)
