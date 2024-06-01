@@ -222,18 +222,18 @@ app.get("/items/:id", async (req, res) => {
 // Search Functionality
 
 // Search categories by name (regular expression)
-app.get("/categories/search", async (req, res) => {
+app.get("/search/categories", async (req, res) => {
 	try {
-		const searchTerm = req.query.term; // Get search term from query parameter
+		const searchTerm = req.query.name;
+		let categories;
 
-		if (!searchTerm) {
-			return res
-				.status(400)
-				.json({ error: "Please provide a search term" });
+		if (searchTerm) {
+			categories = await Category.find({
+				name: { $regex: searchTerm, $options: "i" },
+			});
+		} else {
+			categories = await Category.find({});
 		}
-
-		const regex = new RegExp(searchTerm, "i"); // Case-insensitive search
-		const categories = await Category.find({ name: { $regex: regex } });
 
 		res.json(categories);
 	} catch (err) {
@@ -243,23 +243,23 @@ app.get("/categories/search", async (req, res) => {
 });
 
 // Search items by name (regular expression)
-app.get("/items/search", async (req, res) => {
+app.get("/search/items", async (req, res) => {
 	try {
-		const searchTerm = req.query.term; // Get search term from query parameter
+		const searchTerm = req.query.name;
+		let items;
 
-		if (!searchTerm) {
-			return res
-				.status(400)
-				.json({ error: "Please provide a search term" });
+		if (searchTerm) {
+			items = await Item.find({
+				name: { $regex: searchTerm, $options: "i" },
+			});
+		} else {
+			items = await Item.find({});
 		}
-
-		const regex = new RegExp(searchTerm, "i"); // Case-insensitive search
-		const items = await Item.find({ name: { $regex: regex } });
 
 		res.json(items);
 	} catch (err) {
 		console.error(err);
-		res.status(500).json({ error: "Failed to search items" });
+		res.status(500).json({ error: "Failed to search categories" });
 	}
 });
 
